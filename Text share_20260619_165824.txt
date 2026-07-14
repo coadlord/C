@@ -1,1 +1,155 @@
-https://youtube.com/shorts/rEhN8eOd8vs?si=jVzHF_qv7MwuHSs0
+#include <stdio.h>
+
+#define MAX 5
+
+int lq[MAX], cq[MAX];
+int lf = -1, lr = -1;
+int cf = -1, cr = -1;
+
+// Linear Queue
+void linearEnqueue(int job)
+{
+    if (lr == MAX - 1)
+        printf("Linear Queue Overflow!\n");
+    else
+    {
+        if (lf == -1)
+            lf = 0;
+        lq[++lr] = job;
+        printf("Printer Job %d Added to Linear Queue.\n", job);
+    }
+}
+
+void linearDequeue()
+{
+    if (lf == -1 || lf > lr)
+        printf("No Jobs in Linear Queue.\n");
+    else
+        printf("Printing Job %d\n", lq[lf++]);
+}
+
+void displayLinear()
+{
+    int i;
+    if (lf == -1 || lf > lr)
+        printf("Linear Queue Empty.\n");
+    else
+    {
+        printf("Linear Queue: ");
+        for (i = lf; i <= lr; i++)
+            printf("%d ", lq[i]);
+        printf("\n");
+    }
+}
+
+// Circular Queue
+void circularEnqueue(int job)
+{
+    if ((cr + 1) % MAX == cf)
+    {
+        printf("Circular Queue Full!\n");
+        return;
+    }
+
+    if (cf == -1)
+        cf = cr = 0;
+    else
+        cr = (cr + 1) % MAX;
+
+    cq[cr] = job;
+    printf("Task %d Added to Circular Queue.\n", job);
+}
+
+void circularDequeue()
+{
+    if (cf == -1)
+    {
+        printf("No Tasks in Circular Queue.\n");
+        return;
+    }
+
+    printf("Executing Task %d\n", cq[cf]);
+
+    if (cf == cr)
+        cf = cr = -1;
+    else
+        cf = (cf + 1) % MAX;
+}
+
+void displayCircular()
+{
+    int i;
+
+    if (cf == -1)
+    {
+        printf("Circular Queue Empty.\n");
+        return;
+    }
+
+    printf("Circular Queue: ");
+
+    i = cf;
+    while (i != cr)
+    {
+        printf("%d ", cq[i]);
+        i = (i + 1) % MAX;
+    }
+    printf("%d\n", cq[cr]);
+}
+
+int main()
+{
+    int choice, job;
+
+    while (1)
+    {
+        printf("\n===== Queue Simulation =====\n");
+        printf("1. Add Printer Job (Linear Queue)\n");
+        printf("2. Print Job (Linear Queue)\n");
+        printf("3. Display Linear Queue\n");
+        printf("4. Add Task (Circular Queue)\n");
+        printf("5. Execute Task (Circular Queue)\n");
+        printf("6. Display Circular Queue\n");
+        printf("7. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter Job ID: ");
+            scanf("%d", &job);
+            linearEnqueue(job);
+            break;
+
+        case 2:
+            linearDequeue();
+            break;
+
+        case 3:
+            displayLinear();
+            break;
+
+        case 4:
+            printf("Enter Task ID: ");
+            scanf("%d", &job);
+            circularEnqueue(job);
+            break;
+
+        case 5:
+            circularDequeue();
+            break;
+
+        case 6:
+            displayCircular();
+            break;
+
+        case 7:
+            printf("Program Ended.\n");
+            return 0;
+
+        default:
+            printf("Invalid Choice!\n");
+        }
+    }
+}
