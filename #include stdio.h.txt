@@ -1,0 +1,293 @@
+07.28 6:17 AM
+#include <stdio.h>
+#define SIZE 5
+int queue[SIZE];
+int front = -1, rear = -1;
+void addJob() {
+    int job;
+    if (rear == SIZE - 1) {
+        printf("Printer Queue is Full\n");
+        return;
+    }
+    printf("Enter Job ID: ");
+    scanf("%d", &job);
+    if (front == -1)
+        front = 0;
+    rear++;
+    queue[rear] = job;
+    printf("Job Added Successfully\n");
+}
+void printJob() {
+    if (front == -1 || front > rear) {
+        printf("No Print Jobs\n");
+        return;
+    }
+    printf("Printing Job: %d\n", queue[front]);
+    front++;
+}
+void displayQueue() {
+    int i;
+    if (front == -1 || front > rear) {
+        printf("Printer Queue is Empty\n");
+        return;
+    }
+    printf("Pending Print Jobs: ");
+    for (i = front; i <= rear; i++) {
+        printf("%d ", queue[i]);
+    }
+    printf("\n");
+}
+int main() {
+    int choice;
+    while (1) {
+        printf("\n===== Printer Queue =====\n");
+        printf("1. Add Print Job\n");
+        printf("2. Print Next Job\n");
+        printf("3. Display Queue\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+            case 1:
+                addJob();
+                break;
+            case 2:
+                printJob();
+                break;
+            case 3:
+                displayQueue();
+                break;
+            case 4:
+                printf("Program Exited\n");
+                return 0;
+            default:
+                printf("Invalid Choice\n");
+        }
+    }
+    return 0;
+}
+2.
+#include <stdio.h>
+// ---------- Factorial ----------
+// Iterative Factorial
+int factIterative(int n) {
+    int fact = 1;
+    for (int i = 1; i <= n; i++)
+        fact *= i;
+    return fact;
+}
+// Recursive Factorial
+int factRecursive(int n) {
+    if (n == 0 || n == 1)
+        return 1;
+    return n * factRecursive(n - 1);
+}
+// ---------- Fibonacci ----------
+// Recursive Fibonacci
+int fibRecursive(int n) {
+    if (n == 0)
+        return 0;
+    if (n == 1)
+        return 1;
+    return fibRecursive(n - 1) + fibRecursive(n - 2);
+}
+// ---------- Binary Search ----------
+// Iterative Binary Search
+int binaryIterative(int arr[], int size, int key) {
+    int low = 0, high = size - 1;
+    while (low <= high) {
+        int mid = (low + high) / 2;
+        if (arr[mid] == key)
+            return mid;
+        else if (arr[mid] < key)
+            low = mid + 1;
+        else
+            high = mid - 1;
+    }
+    return -1;
+}
+// Recursive Binary Search
+int binaryRecursive(int arr[], int low, int high, int key) {
+    if (low > high)
+        return -1;
+    int mid = (low + high) / 2;
+    if (arr[mid] == key)
+        return mid;
+    else if (arr[mid] < key)
+        return binaryRecursive(arr, mid + 1, high, key);
+    else
+        return binaryRecursive(arr, low, mid - 1, key);
+}
+int main() {
+    int choice, n, key, size, i;
+    do {
+        printf("\n----- MENU -----\n");
+        printf("1. Factorial\n");
+        printf("2. Fibonacci\n");
+        printf("3. Binary Search\n");
+        printf("4. Exit\n");
+        printf("Enter your choice: ");
+        scanf("%d", &choice);
+        switch (choice) {
+        case 1:
+            printf("Enter a number: ");
+            scanf("%d", &n);
+            printf("Factorial (Iterative) = %d\n", factIterative(n));
+            printf("Factorial (Recursive) = %d\n", factRecursive(n));
+            break;
+        case 2:
+            printf("Enter number of terms: ");
+            scanf("%d", &n);
+            printf("Fibonacci (Iterative): ");
+            int a = 0, b = 1, c;
+            for (i = 0; i < n; i++) {
+                printf("%d ", a);
+                c = a + b;
+                a = b;
+                b = c;
+            }
+            printf("\nFibonacci (Recursive): ");
+            for (i = 0; i < n; i++)
+                printf("%d ", fibRecursive(i));
+            printf("\n");
+            break;
+        case 3: {
+            printf("Enter size of array: ");
+            scanf("%d", &size);
+            int arr[size];
+            printf("Enter sorted elements:\n");
+            for (i = 0; i < size; i++)
+                scanf("%d", &arr[i]);
+            printf("Enter element to search: ");
+            scanf("%d", &key);
+            int pos1 = binaryIterative(arr, size, key);
+            int pos2 = binaryRecursive(arr, 0, size - 1, key);
+            if (pos1 != -1)
+                printf("Iterative: Element found at position %d\n", pos1 + 1);
+            else
+                printf("Iterative: Element not found\n");
+            if (pos2 != -1)
+                printf("Recursive: Element found at position %d\n", pos2 + 1);
+            else
+                printf("Recursive: Element not found\n");
+            break;
+        }
+        case 4:
+            printf("Program Exited.\n");
+            break;
+        default:
+            printf("Invalid Choice!\n");
+        }
+    } while (choice != 4);
+    return 0;
+}
+Nestnnnnnnnnnnnmnn
+#include <stdio.h>
+#include <string.h>
+#define MAX 100
+char stack[MAX];
+int top = -1;
+void push(char ch) {
+    stack[++top] = ch;
+}
+char pop() {
+    return stack[top--];
+}
+int isMatching(char open, char close) {
+    if (open == '(' && close == ')')
+        return 1;
+    if (open == '{' && close == '}')
+        return 1;
+    if (open == '[' && close == ']')
+        return 1;
+    return 0;
+}
+int main() {
+    char exp[MAX];
+    int i;
+    printf("Enter an expression: ");
+    scanf("%s", exp);
+    for (i = 0; i < strlen(exp); i++) {
+        char ch = exp[i];
+        if (ch == '(' || ch == '{' || ch == '[')
+            push(ch);
+        else if (ch == ')' || ch == '}' || ch == ']') {
+            if (top == -1) {
+                printf("Parentheses are NOT Balanced.\n");
+                return 0;
+            }
+            char open = pop();
+            if (!isMatching(open, ch)) {
+                printf("Parentheses are NOT Balanced.\n");
+                return 0;
+            }
+        }
+    }
+    if (top == -1)
+        printf("Parentheses are Balanced.\n");
+    else
+        printf("Parentheses are NOT Balanced.\n");
+    return 0;
+}
+Nextttttttttyyt
+#include <stdio.h>
+#include <stdlib.h>
+struct node {
+    int data;
+    struct node *left, *right;
+};
+struct node* create(int x) {
+    struct node *n = (struct node*)malloc(sizeof(struct node));
+    n->data = x;
+    n->left = n->right = NULL;
+    return n;
+}
+struct node* insert(struct node *root, int x) {
+    if (root == NULL)
+        return create(x);
+    if (x < root->data)
+        root->left = insert(root->left, x);
+    else
+        root->right = insert(root->right, x);
+    return root;
+}
+void inorder(struct node *root) {
+    if (root) {
+        inorder(root->left);
+        printf("%d ", root->data);
+        inorder(root->right);
+    }
+}
+void preorder(struct node *root) {
+    if (root) {
+        printf("%d ", root->data);
+        preorder(root->left);
+        preorder(root->right);
+    }
+}
+void postorder(struct node *root) {
+    if (root) {
+        postorder(root->left);
+        postorder(root->right);
+        printf("%d ", root->data);
+    }
+}
+int main() {
+    struct node *root = NULL;
+    int n, x, i;
+    printf("Enter number of nodes: ");
+    scanf("%d", &n);
+    printf("Enter elements:\n");
+    for (i = 0; i < n; i++) {
+        scanf("%d", &x);
+        root = insert(root, x);
+    }
+    printf("Inorder: ");
+    inorder(root);
+    printf("\nPreorder: ");
+    preorder(root);
+    printf("\nPostorder: ");
+    postorder(root);
+    return 0;
+}
+
